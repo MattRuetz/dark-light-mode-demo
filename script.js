@@ -12,22 +12,18 @@ const imageMode = (color) => {
     image3.src=`img/undraw_conceptual_idea_${color}.svg`;
 }
 
-// Dark Mode Style
-const darkMode = () => {
-    nav.style.backgroundColor = 'rgb(0 0 0 / 50%)';
-    textBox.style.backgroundColor = 'rgb(255 255 255 / 50%)';
-    toggleIcon.children[0].textContent = "Dark Mode";
-    toggleIcon.children[1].classList.replace('fa-sun', 'fa-moon');
-    imageMode('dark');
-}
+const toggleDarkLightMode = (isLight) => {
+    nav.style.backgroundColor = isLight ? 'rgb(255 255 255 / 50%)' : 'rgb(0 0 0 / 50%)';
+    textBox.style.backgroundColor = isLight ? 'rgb(0 0 0 / 50%)' : 'rgb(255 255 255 / 50%)';
+    toggleIcon.children[0].textContent = isLight ? "Light Mode" : "Dark Mode";
 
-// Light Mode Styles
-const lightMode = () => {
-    nav.style.backgroundColor = 'rgb(255 255 255 / 50%)';
-    textBox.style.backgroundColor = 'rgb(0 0 0 / 50%)';
-    toggleIcon.children[0].textContent = "Light Mode";
-    toggleIcon.children[1].classList.replace('fa-moon', 'fa-sun');
-    imageMode('light');
+    if(isLight) {
+        toggleIcon.children[1].classList.replace('fa-moon', 'fa-sun');
+        imageMode('light');
+    } else {
+        toggleIcon.children[1].classList.replace('fa-sun', 'fa-moon');
+        imageMode('dark');
+    }
 }
 
 // Event listener for color mode switch
@@ -35,11 +31,11 @@ toggleSwitch.addEventListener('change', (e) => {
     if(e.target.checked) {
         document.documentElement.setAttribute('data-theme', 'dark')
         localStorage.setItem('theme', 'dark');
-        darkMode();
+        toggleDarkLightMode( false);
     } else {
         document.documentElement.setAttribute('data-theme', 'light');
         localStorage.setItem('theme', 'light');
-        lightMode();
+        toggleDarkLightMode(true);
     }
 })
 
@@ -49,7 +45,7 @@ if (currentTheme) {
     document.documentElement.setAttribute('data-theme', currentTheme);
     if(currentTheme === 'dark') {
         toggleSwitch.checked = true;
-        darkMode();
+        toggleDarkLightMode(false);
     }
 }
 
